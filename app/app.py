@@ -21,9 +21,9 @@ def health():
 )
 def slack_events():
     request = app.current_request
-    logger.debug(f"Request: {request.to_dict()}")
+    # logger.debug(f"Request: {request.to_dict()}")
     if request.headers.get("X-Slack-Retry-Num") is not None:
         return {"status": "retry request ignored"}
     response = slack_handler.handle(request)
-    logger.debug(f"Response: {response.to_dict()}")
+    # logger.debug(f"Response: {response.to_dict()}")
     return response
