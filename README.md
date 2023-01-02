@@ -1,4 +1,4 @@
-# Template for Slackbot development with Bolt and AWS Chalice
+# OpenAI Bot for Slack
 
 
 ## Requirements
@@ -9,20 +9,10 @@
 
 ## Preparation
 
-1. Set your project and app names in the following files.
-     - `pyproject.tom` (`name`)
-     - `app/app.py` (`app_name`)
-     - `app/.chalice/config.template.json` (`app_name`)
+1. Install python packages by `poetry install`.
 
-2. Install python packages by `poetry install`.
+2. Create your slack app, install it to your slack workspace, and get the bot token and signing secret. For details, read [the official tutorial](https://slack.dev/bolt-python/tutorial/getting-started-http).
 
-3. Create your slack app, install it to your slack workspace, and get the bot token and signing secret. For details, read [the official tutorial](https://slack.dev/bolt-python/tutorial/getting-started-http).
-
-## Development
-
-- poetry for package management
-- pysen for linting and formatting
-- pytest for testing
 
 ## Deployment
 Run the deployment script.

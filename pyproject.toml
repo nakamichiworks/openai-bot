@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "slack-bolt-chalice-template"
+name = "openai-bot"
 version = "0.1.0"
 description = ""
 authors = ["Michihiro Nakamura <nakamichi@nakamichi.org>"]
@@ -11,6 +11,7 @@ chalice = "^1.27.3"
 slack-bolt = "^1.16.1"
 loguru = "^0.6.0"
 boto3 = "^1.26.41"
+openai = "^0.25.0"
 
 [tool.poetry.group.dev.dependencies]
 pysen = "^0.10.2"
@@ -21,6 +22,8 @@ mypy = "^0.991"
 ipython = "^8.7.0"
 jinja2-cli = "^0.8.2"
 pytest = "^7.2.0"
+ipykernel = "^6.19.4"
+python-dotenv = "^0.21.0"
 
 
 [tool.pysen]

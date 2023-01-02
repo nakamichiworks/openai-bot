@@ -11,6 +11,8 @@ jinja2 .chalice/config.template.json \
     -D SLACK_SIGNING_SECRET="${SLACK_SIGNING_SECRET}" \
     -D SLACK_BOT_TOKEN_DEV="${SLACK_BOT_TOKEN_DEV}" \
     -D SLACK_SIGNING_SECRET_DEV="${SLACK_SIGNING_SECRET_DEV}" \
+    -D OPENAI_ORGANIZATION="${OPENAI_ORGANIZATION}" \
+    -D OPENAI_API_KEY="${OPENAI_API_KEY}" \
     > .chalice/config.json
 
 chalice deploy --stage ${stage}

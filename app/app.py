@@ -4,7 +4,7 @@ from slack_bolt.adapter.aws_lambda.chalice_handler import ChaliceSlackRequestHan
 
 from chalicelib.slack import app as bolt_app
 
-app = Chalice(app_name="app")
+app = Chalice(app_name="openai-bot")
 slack_handler = ChaliceSlackRequestHandler(bolt_app, app)
 slack_handler.clear_all_log_handlers()
 
@@ -22,6 +22,8 @@ def health():
 def slack_events():
     request = app.current_request
     logger.debug(f"Request: {request.to_dict()}")
+    if request.headers.get("X-Slack-Retry-Num") is not None:
+        return {"status": "retry request ignored"}
     response = slack_handler.handle(request)
     logger.debug(f"Response: {response.to_dict()}")
     return response

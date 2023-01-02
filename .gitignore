@@ -1,3 +1,5 @@
+app/.chalice/deployed/
+notebooks/
 # Should be generated from config.template.json
 config.json
 # Should be generated from poetry.lock
