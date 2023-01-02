@@ -1,5 +1,6 @@
 import os
 import re
+import tempfile
 
 from loguru import logger
 from slack_bolt import App
@@ -21,6 +22,7 @@ def message_hello(message, say):
 @app.event("app_mention")
 def reply(event, say):
     openai = OpenAIClient()
+    channel = event["channel"]
     user = event["user"]
     text = event["text"].strip()
     match = re.match(r"<@[0-9a-zA-Z]+>(.+)$", text, re.DOTALL)
@@ -30,11 +32,24 @@ def reply(event, say):
     else:
         prompt = match.groups()[0].strip()
         try:
-            comp = openai.get_completion(prompt)
+            completion = openai.get_completion(prompt)
+            image_bytes = openai.get_image(prompt)
         except:
             logger.exception(f"Failed to get the completion for '{prompt}'")
             resp = "ごめん、うまく答えられないよ～"
+            image_file = None
         else:
-            resp = comp
+            resp = completion
+            _, image_file = tempfile.mkstemp(suffix=".png")
+            with open(image_file, "wb") as f:
+                f.write(image_bytes)
 
     say(f"<@{user}> {resp}")
+    if image_file:
+        app.client.files_upload(
+            file=image_file,
+            filetype="png",
+            channels=channel,
+            initial_comment=f"<@{user}>",
+        )
+        os.remove(image_file)

@@ -22,6 +22,8 @@ Run the deployment script.
     ```bash
     export SLACK_BOT_TOKEN_DEV=<your-dev-bot-token>
     export SLACK_SIGNING_SECRET_DEV=<your-dev-signing-secret>
+    export OPENAI_ORGANIZATION=<your-org>
+    export OPENAI_API_KEY=<your-api-key>
     ./deploy.sh dev
     ```
 
@@ -30,6 +32,8 @@ Run the deployment script.
     ```bash
     export SLACK_BOT_TOKEN=<your-bot-token>
     export SLACK_SIGNING_SECRET=<your-signing-secret>
+    export OPENAI_ORGANIZATION=<your-org>
+    export OPENAI_API_KEY=<your-api-key>
     ./deploy.sh prod
     ```
 
@@ -37,4 +41,9 @@ After the first deployment, properly configure the settings below. Follow [the o
 
 - Interactivity & Shortcuts Request URL
 - Event Subscriptions Request URL
-- Subscribed bot events (`app_mention`, `message.channels`, etc.)
+- Subscribed events
+  - `app_mention`
+  - `message.channels`
+- OAuth scops
+  - `chat:write`
+  - `files:write`
