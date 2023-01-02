@@ -22,18 +22,20 @@ def reply_mention(event, say):
     msg = event["text"]
 
     try:
-        command, prompt = parse(msg)
+        command, args = parse(msg)
     except ParseError:
         reply = "入力した文章がおかしいよ！"
         say(f"<@{user}> {reply}")
         return
 
     if command == "text":
+        prompt = args[0]
         reply = generate_text(prompt)
         say(f"<@{user}> {reply}")
         return
 
     if command == "image":
+        prompt = args[0]
         reply, images = generate_image(prompt)
         if images:
             app.client.files_upload_v2(
@@ -46,6 +48,13 @@ def reply_mention(event, say):
         else:
             say(f"<@{user}> {reply}")
         return
+
+    if command == "textedit":
+        reply = generate_edit(*args)
+        say(f"<@{user}> {reply}")
+        return
+
+    raise Exception("私、バグっているみたいです！")  # must not be reached
 
 
 def generate_text(prompt: str) -> str:
@@ -77,3 +86,17 @@ def generate_image(prompt: str) -> tuple[str, Optional[list[str]]]:
             f.write(image)
         image_files.append(image_file)
     return reply, image_files
+
+
+def generate_edit(input: str, instruction: str) -> str:
+    openai = OpenAIClient()
+    try:
+        edit = openai.get_edit(input, instruction)
+    except:
+        logger.exception(
+            f"Failed to get the text edit for '{input}' and '{instruction}'"
+        )
+        reply = "ごめんなさい、文章が作れませんでした！"
+    else:
+        reply = edit
+    return reply

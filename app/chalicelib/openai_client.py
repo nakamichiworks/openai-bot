@@ -22,3 +22,12 @@ class OpenAIClient:
         )
         images = [base64.b64decode(img.b64_json) for img in resp.data]
         return images
+
+    def get_edit(self, input: str, instruction: str):
+        resp = openai.Edit.create(
+            model="text-davinci-edit-001",
+            input=input,
+            instruction=instruction,
+        )
+        text = resp.choices[0].text
+        return text
