@@ -31,7 +31,7 @@ def reply_mention(event, say):
     try:
         command, args = parse(msg)
     except ParseError:
-        reply = "入力した文章がおかしいよ！"
+        reply = "入力したコマンドと文章がおかしいよ！"
         say(f"<@{user}> {reply}")
         return
 

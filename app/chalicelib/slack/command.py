@@ -133,8 +133,8 @@ def command_imageedit(
         try:
             download_file(file_url, input_file, client.token)
         except:
-            logger.exception(f"Failed to retrieve an image: {file_url}")
-            say("{file_url}の画像が取得できないので編集できないよ！")
+            logger.exception(f"Failed to retrieve an image: {file_url=}")
+            say("{file_url} の画像が取得できないので編集できないよ！")
             continue
 
         reply, output_files = generate_image_variation(input_file)
