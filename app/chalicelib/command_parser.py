@@ -1,9 +1,11 @@
 import re
 from typing import Literal, Sequence
 
-COMMANDS = ("text", "textedit", "textinsert", "image")
+COMMANDS = ("code", "codeedit", "codeinsert", "text", "textedit", "textinsert", "image")
 
-Command = Literal["text", "textedit", "textinsert", "image"]
+Command = Literal[
+    "code", "codeedit", "codeinsert", "text", "textedit", "textinsert", "image"
+]
 Args = Sequence[str]
 
 
@@ -28,14 +30,14 @@ def parse(text: str) -> tuple[Command, Args]:
         text = match_command.group(2).strip()
 
     # Subcommand parsing
-    if command == "textedit":
+    if command in ("codeedit", "textedit"):
         match_subcommand = re.match(
             r"(.*?)^instruction$(.*)", text, re.MULTILINE | re.DOTALL
         )
         if not match_subcommand:
             raise ParseError
         args = match_subcommand.groups()
-    elif command == "textinsert":
+    elif command in ("codeinsert", "textinsert"):
         match_subcommand = re.match(
             r"(.*?)^suffix$(.*)", text, re.MULTILINE | re.DOTALL
         )

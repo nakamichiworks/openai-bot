@@ -29,6 +29,22 @@ def reply_mention(event, say):
         say(f"<@{user}> {reply}")
         return
 
+    if command == "code":
+        prompt = args[0]
+        reply = generate_code_completion(prompt)
+        say(f"<@{user}> {reply}")
+        return
+
+    if command == "codeedit":
+        reply = generate_code_edit(*args)
+        say(f"<@{user}> {reply}")
+        return
+
+    if command == "codeinsert":
+        reply = generate_code_insertion(*args)
+        say(f"<@{user}> {reply}")
+        return
+
     if command == "text":
         prompt = args[0]
         reply = generate_text_completion(prompt)
@@ -102,6 +118,46 @@ def reply_image(event, say):
                 os.remove(file)
         else:
             say(f"<@{user}> {reply}")
+
+
+def generate_code_completion(prompt: str) -> str:
+    openai = OpenAIClient()
+    try:
+        completion = openai.get_code_completion(prompt)
+    except:
+        logger.exception(f"Failed to get the code completion for '{prompt}'")
+        reply = "ごめんなさい、コードが書けませんでした！"
+    else:
+        reply = completion
+    return reply
+
+
+def generate_code_edit(input: str, instruction: str) -> str:
+    openai = OpenAIClient()
+    try:
+        edit = openai.get_code_edit(input, instruction)
+    except:
+        logger.exception(
+            f"Failed to get the code edit for '{input}' and '{instruction}'"
+        )
+        reply = "ごめんなさい、コードを編集できませんでした！"
+    else:
+        reply = edit
+    return reply
+
+
+def generate_code_insertion(prompt: str, suffix: str) -> str:
+    openai = OpenAIClient()
+    try:
+        insertion = openai.get_code_insertion(prompt, suffix)
+    except:
+        logger.exception(
+            f"Failed to get the code insertion for '{prompt}' and '{suffix}'"
+        )
+        reply = "ごめんなさい、文章を挿入できませんでした！"
+    else:
+        reply = insertion
+    return reply
 
 
 def generate_text_completion(prompt: str) -> str:

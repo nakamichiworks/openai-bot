@@ -9,25 +9,29 @@ class OpenAIClient:
         openai.organization = os.getenv("OPENAI_ORGANIZATION")
         openai.api_key = os.getenv("OPENAI_API_KEY")
 
-    def get_text_completion(self, prompt: str) -> str:
+    def get_text_completion(self, prompt: str, model: str = "text-davinci-003") -> str:
         resp = openai.Completion.create(
-            model="text-davinci-003", prompt=prompt, max_tokens=3000, temperature=0
+            model=model, prompt=prompt, max_tokens=3000, temperature=0
         )
         text = resp.choices[0].text
         return text
 
-    def get_text_edit(self, input: str, instruction: str):
+    def get_text_edit(
+        self, input: str, instruction: str, model: str = "text-davinci-edit-001"
+    ) -> str:
         resp = openai.Edit.create(
-            model="text-davinci-edit-001",
+            model=model,
             input=input,
             instruction=instruction,
         )
         text = resp.choices[0].text
         return text
 
-    def get_text_insertion(self, prompt: str, suffix: str):
+    def get_text_insertion(
+        self, prompt: str, suffix: str, model: str = "text-davinci-003"
+    ) -> str:
         resp = openai.Completion.create(
-            model="text-davinci-003",
+            model=model,
             prompt=prompt,
             suffix=suffix,
             max_tokens=3000,
@@ -35,6 +39,15 @@ class OpenAIClient:
         )
         text = resp.choices[0].text
         return text
+
+    def get_code_completion(self, prompt: str) -> str:
+        return self.get_text_completion(prompt, model="code-davinci-002")
+
+    def get_code_edit(self, input: str, instruction: str) -> str:
+        return self.get_text_edit(input, instruction, model="code-davinci-edit-001")
+
+    def get_code_insertion(self, prompt: str, suffix: str) -> str:
+        return self.get_text_insertion(prompt, suffix, model="code-davinci-002")
 
     def get_image(self, prompt: str) -> list[bytes]:
         resp = openai.Image.create(
