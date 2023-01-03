@@ -12,6 +12,7 @@ slack-bolt = "^1.16.1"
 loguru = "^0.6.0"
 boto3 = "^1.26.41"
 openai = "^0.25.0"
+pillow = "^9.4.0"
 
 [tool.poetry.group.dev.dependencies]
 pysen = "^0.10.2"

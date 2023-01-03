@@ -129,17 +129,12 @@ def command_imageedit(
     say: Callable[[str], None],
 ):
     for file_url, file_type in zip(file_urls, file_types):
-        if file_type not in ("png",):
-            # Only PNG up to 4MB is accepted by OpenAI
-            say("f{file_url}はpngファイルじゃないから受け付けられないよ！）")
-            continue
-
-        _, input_file = tempfile.mkstemp(suffix=".png")
+        _, input_file = tempfile.mkstemp(suffix=f".{file_type}")
         try:
             download_file(file_url, input_file, client.token)
         except:
             logger.exception(f"Failed to retrieve an image: {file_url}")
-            say("{file_url}の画像が取得できなかったよ！")
+            say("{file_url}の画像が取得できないので編集できないよ！")
             continue
 
         reply, output_files = generate_image_variation(input_file)
