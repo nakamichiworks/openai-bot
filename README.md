@@ -44,6 +44,8 @@ After the first deployment, properly configure the settings below. Follow [the o
 - Subscribed events
   - `app_mention`
   - `message.channels`
+  - `file_shared`
 - OAuth scops
   - `chat:write`
   - `files:write`
+  - `files:read`
