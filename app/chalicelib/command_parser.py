@@ -1,9 +1,9 @@
 import re
-from typing import Literal, Sequence, Union
+from typing import Literal, Sequence
 
-COMMANDS = ("text", "textedit", "image")
+COMMANDS = ("text", "textedit", "textinsert", "image")
 
-Command = Literal["text", "textedit", "image"]
+Command = Literal["text", "textedit", "textinsert", "image"]
 Args = Sequence[str]
 
 
@@ -18,7 +18,7 @@ def parse(text: str) -> tuple[Command, Args]:
         raise ParseError
     text = match_mention.group(1).strip()
 
-    # Extract the command and the following text
+    # Main command parsing
     match_command = re.match(r"(\S+)\s+?(.+)", text, re.DOTALL)
     if not (match_command and match_command.group(1) in COMMANDS):
         command = "text"
@@ -31,6 +31,13 @@ def parse(text: str) -> tuple[Command, Args]:
     if command == "textedit":
         match_subcommand = re.match(
             r"(.*?)^instruction$(.*)", text, re.MULTILINE | re.DOTALL
+        )
+        if not match_subcommand:
+            raise ParseError
+        args = match_subcommand.groups()
+    elif command == "textinsert":
+        match_subcommand = re.match(
+            r"(.*?)^suffix$(.*)", text, re.MULTILINE | re.DOTALL
         )
         if not match_subcommand:
             raise ParseError

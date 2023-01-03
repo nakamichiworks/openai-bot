@@ -40,6 +40,11 @@ def reply_mention(event, say):
         say(f"<@{user}> {reply}")
         return
 
+    if command == "textinsert":
+        reply = generate_text_insertion(*args)
+        say(f"<@{user}> {reply}")
+        return
+
     if command == "image":
         prompt = args[0]
         reply, images = generate_image(prompt)
@@ -122,6 +127,20 @@ def generate_text_edit(input: str, instruction: str) -> str:
         reply = "ごめんなさい、文章を編集できませんでした！"
     else:
         reply = edit
+    return reply
+
+
+def generate_text_insertion(prompt: str, suffix: str) -> str:
+    openai = OpenAIClient()
+    try:
+        insertion = openai.get_text_insertion(prompt, suffix)
+    except:
+        logger.exception(
+            f"Failed to get the text insertion for '{prompt}' and '{suffix}'"
+        )
+        reply = "ごめんなさい、文章を挿入できませんでした！"
+    else:
+        reply = insertion
     return reply
 
 

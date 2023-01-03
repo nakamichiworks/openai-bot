@@ -25,6 +25,17 @@ class OpenAIClient:
         text = resp.choices[0].text
         return text
 
+    def get_text_insertion(self, prompt: str, suffix: str):
+        resp = openai.Completion.create(
+            model="text-davinci-003",
+            prompt=prompt,
+            suffix=suffix,
+            max_tokens=3000,
+            temperature=0,
+        )
+        text = resp.choices[0].text
+        return text
+
     def get_image(self, prompt: str) -> list[bytes]:
         resp = openai.Image.create(
             prompt=prompt, n=3, size="512x512", response_format="b64_json"
