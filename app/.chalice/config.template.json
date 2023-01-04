@@ -4,6 +4,8 @@
   "stages": {
     "dev": {
       "api_gateway_stage": "api",
+      "lambda_timeout": 180,
+      "automatic_layer": true,
       "environment_variables": {
         "SLACK_BOT_TOKEN": "{{ SLACK_BOT_TOKEN_DEV }}",
         "SLACK_SIGNING_SECRET": "{{ SLACK_SIGNING_SECRET_DEV }}",
@@ -14,6 +16,8 @@
     },
     "prod": {
       "api_gateway_stage": "api",
+      "lambda_timeout": 180,
+      "automatic_layer": true,
       "environment_variables": {
         "SLACK_BOT_TOKEN": "{{ SLACK_BOT_TOKEN }}",
         "SLACK_SIGNING_SECRET": "{{ SLACK_SIGNING_SECRET }}",

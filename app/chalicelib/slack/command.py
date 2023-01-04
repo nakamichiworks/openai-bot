@@ -4,9 +4,10 @@
 import os
 import re
 import tempfile
-from typing import Callable, Literal, Sequence
+from typing import Literal, Sequence
 
 from loguru import logger
+from slack_bolt.context.say import Say
 from slack_sdk import WebClient
 
 from ..service import (
@@ -15,16 +16,27 @@ from ..service import (
     generate_code_insertion,
     generate_image,
     generate_image_variation,
+    generate_initial_chat,
+    generate_next_chat,
     generate_text_completion,
     generate_text_edit,
     generate_text_insertion,
 )
 from ..util import download_file
 
-COMMANDS = ("code", "codeedit", "codeinsert", "text", "textedit", "textinsert", "image")
+COMMANDS = (
+    "chat",
+    "text",
+    "textedit",
+    "textinsert",
+    "code",
+    "codeedit",
+    "codeinsert",
+    "image",
+)
 
 Command = Literal[
-    "code", "codeedit", "codeinsert", "text", "textedit", "textinsert", "image"
+    "chat", "text", "textedit", "textinsert", "code", "codeedit", "codeinsert", "image"
 ]
 Args = Sequence[str]
 
@@ -70,43 +82,55 @@ def parse(text: str) -> tuple[Command, Args]:
     return command, args
 
 
-def command_text(prompt: str, user: str, say: Callable[[str], None]):
+def command_chat(input: str, thread_ts: str, say: Say):
+    reply = generate_initial_chat(input)
+    say(f"{reply}", thread_ts=thread_ts)
+
+
+def command_chat_next(
+    client: WebClient, user: str, channel: str, thread_ts: str, say: Say
+):
+    resp = client.conversations_replies(channel=channel, ts=thread_ts)
+    messages = resp.get("messages")
+    if messages:
+        # TODO: pagination handling
+        reply = generate_next_chat(
+            [(m["user"], m["text"]) for m in messages], user=user
+        )
+        say(f"{reply}", thread_ts=thread_ts)
+
+
+def command_text(prompt: str, user: str, say: Say):
     reply = generate_text_completion(prompt)
     say(f"<@{user}>\n{reply}")
 
 
-def command_textedit(
-    input: str, instruction: str, user: str, say: Callable[[str], None]
-):
+def command_textedit(input: str, instruction: str, user: str, say: Say):
     reply = generate_text_edit(input, instruction)
     say(f"<@{user}>\n{reply}")
 
 
-def command_textinsert(prompt: str, suffix: str, user: str, say: Callable[[str], None]):
+def command_textinsert(prompt: str, suffix: str, user: str, say: Say):
     reply = generate_text_insertion(prompt, suffix)
     say(f"<@{user}>\n{reply}")
 
 
-def command_code(prompt: str, user: str, say: Callable[[str], None]):
+def command_code(prompt: str, user: str, say: Say):
     reply = generate_code_completion(prompt)
     say(f"<@{user}>\n{reply}")
 
 
-def command_codeedit(
-    input: str, instruction: str, user: str, say: Callable[[str], None]
-):
+def command_codeedit(input: str, instruction: str, user: str, say: Say):
     reply = generate_code_edit(input, instruction)
     say(f"<@{user}>\n{reply}")
 
 
-def command_codeinsert(prompt: str, suffix: str, user: str, say: Callable[[str], None]):
+def command_codeinsert(prompt: str, suffix: str, user: str, say: Say):
     reply = generate_code_insertion(prompt, suffix)
     say(f"<@{user}>\n{reply}")
 
 
-def command_image(
-    prompt: str, client: WebClient, user: str, channel: str, say: Callable[[str], None]
-):
+def command_image(prompt: str, client: WebClient, user: str, channel: str, say: Say):
     reply, image_files = generate_image(prompt)
     if image_files:
         client.files_upload_v2(
@@ -120,13 +144,13 @@ def command_image(
         say(f"<@{user}> {reply}")
 
 
-def command_imageedit(
+def command_image_variation(
     file_urls: list[str],
     file_types: list[str],
     client: WebClient,
     user: str,
     channel: str,
-    say: Callable[[str], None],
+    say: Say,
 ):
     for file_url, file_type in zip(file_urls, file_types):
         _, input_file = tempfile.mkstemp(suffix=f".{file_type}")
