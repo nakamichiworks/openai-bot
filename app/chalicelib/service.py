@@ -37,7 +37,7 @@ def generate_next_chat(messages: list[tuple[str, str]], user: str) -> str:
     )
     chain = LLMChain(llm=OpenAIClient(), prompt=prompt)
     replies = []
-    for usr, msg in messages[:3]:  # short memory
+    for usr, msg in messages[-3:]:  # short memory
         if usr == user:
             replies.append(f"人間: {msg}")
         else:
