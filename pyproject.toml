@@ -10,7 +10,7 @@ python = "~3.9"
 chalice = "^1.27.3"
 slack-bolt = "^1.16.1"
 loguru = "^0.6.0"
-boto3 = "^1.26.41"
+boto3 = "^1.26.41"  # For slack-bolt adapter
 openai = "^0.25.0"
 pillow = "^9.4.0"
 
