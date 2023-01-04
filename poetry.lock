@@ -631,20 +631,6 @@ files = [
 gitdb = ">=4.0.1,<5"
 
 [[package]]
-name = "google-search-results"
-version = "2.4.1"
-description = "Scrape and search localized results from Google, Bing, Baidu, Yahoo, Yandex, Ebay, Homedepot, youtube at scale using SerpApi.com"
-category = "dev"
-optional = false
-python-versions = ">=3.5"
-files = [
-    {file = "google_search_results-2.4.1.tar.gz", hash = "sha256:021746fc21c0b0786e61a2d103d93a08c5c84e204d3f93cd4d589e0e117614a7"},
-]
-
-[package.dependencies]
-requests = "*"
-
-[[package]]
 name = "greenlet"
 version = "2.0.1"
 description = "Lightweight in-process concurrent programming"
@@ -2393,4 +2379,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9"
-content-hash = "a62e6c3de8773eca09865be754243c89da04ba9073644288b959f893a8f33f1f"
+content-hash = "b7b5d48d9be4e7d49a0b2885f5188b8556adcfa28601796f466762f58e79a0ae"
