@@ -13,6 +13,13 @@
 
 2. Create your slack app, install it to your slack workspace, and get the bot token and signing secret. For details, read [the Slack official tutorial](https://slack.dev/bolt-python/tutorial/getting-started-http).
 
+## Development
+
+You can run a development server by the following command.
+
+```bash
+./scripts/run_dev_server.sh
+```
 
 ## Deployment
 

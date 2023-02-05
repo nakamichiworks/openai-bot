@@ -52,10 +52,10 @@ variables:                    # Pass environment variables as key value pairs.
 #   project: project-name
 
 # You can override any of the values defined above by environment.
-environments:
-  test:
-    variables:
-      LOG_LEVEL: debug
-      SLACK_BOT_TOKEN: {{ SLACK_BOT_TOKEN_DEV }}
-      SLACK_USER_TOKEN: {{ SLACK_USER_TOKEN_DEV }}
-      SLACK_SIGNING_SECRET: {{ SLACK_SIGNING_SECRET_DEV }}
+# environments:
+#   dev:
+#     variables:
+#       LOG_LEVEL: debug
+#       SLACK_BOT_TOKEN: {{ SLACK_BOT_TOKEN_DEV }}
+#       SLACK_USER_TOKEN: {{ SLACK_USER_TOKEN_DEV }}
+#       SLACK_SIGNING_SECRET: {{ SLACK_SIGNING_SECRET_DEV }}
