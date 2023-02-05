@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e
 SCRIPT_DIR="$(cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P)"
-cd "${SCRIPT_DIR}/app"
+cd "${SCRIPT_DIR}/.."
 
-stage="${1:-dev}"  # dev or prod
+env="${1:-dev}"  # dev or prod
 
-poetry export -f requirements.txt --output requirements.txt --only main
-jinja2 .chalice/config.template.json \
+echo -n "Create copilot/backend/manifest.yml ... "
+jinja2 copilot/backend/manifest.template.yml \
     -D SLACK_BOT_TOKEN="${SLACK_BOT_TOKEN}" \
     -D SLACK_USER_TOKEN="${SLACK_USER_TOKEN}" \
     -D SLACK_SIGNING_SECRET="${SLACK_SIGNING_SECRET}" \
@@ -15,6 +15,10 @@ jinja2 .chalice/config.template.json \
     -D SLACK_SIGNING_SECRET_DEV="${SLACK_SIGNING_SECRET_DEV}" \
     -D OPENAI_ORGANIZATION="${OPENAI_ORGANIZATION}" \
     -D OPENAI_API_KEY="${OPENAI_API_KEY}" \
-    > .chalice/config.json
+    > copilot/backend/manifest.yml
+echo "Done"
 
-chalice deploy --stage ${stage}
+echo -n "Create copilot/environments/${env}/manifest.yml ... "
+jinja2 copilot/environments/${env}/manifest.template.yml \
+    > copilot/environments/${env}/manifest.yml
+echo "Done"

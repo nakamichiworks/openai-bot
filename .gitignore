@@ -1,10 +1,7 @@
-app/.chalice/deployed/
-notebooks/
 .envrc
-# Should be generated from config.template.json
-config.json
-# Should be generated from poetry.lock
-requirements.txt
+notebooks/
+# Should be generated from manifest.template.yml
+copilot/**/manifest.yml
 
 
 # Byte-compiled / optimized / DLL files
