@@ -1,8 +1,9 @@
 # Services are responsible for generating the reply message and additional content (e.g. images).
 # They must be easily testable and shoud not depend on Slack SDK.
 
+import json
 import tempfile
-from typing import Optional
+from typing import Optional, Sequence
 
 import langchain
 from langchain import LLMChain, PromptTemplate
@@ -162,3 +163,9 @@ def generate_image_variation(image_file: str) -> tuple[str, Optional[list[str]]]
             f.write(image)
         image_files.append(image_file)
     return reply, image_files
+
+
+def summarize_slack_messages(messages: Sequence[dict]) -> str:
+    # TODO: implement it
+    reply = "```\n" + json.dumps(messages, indent=2, ensure_ascii=False) + "\n```"
+    return reply

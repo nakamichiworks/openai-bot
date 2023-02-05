@@ -8,6 +8,7 @@
       "automatic_layer": true,
       "environment_variables": {
         "SLACK_BOT_TOKEN": "{{ SLACK_BOT_TOKEN_DEV }}",
+        "SLACK_USER_TOKEN": "{{ SLACK_USER_TOKEN_DEV }}",
         "SLACK_SIGNING_SECRET": "{{ SLACK_SIGNING_SECRET_DEV }}",
         "OPENAI_ORGANIZATION": "{{ OPENAI_ORGANIZATION }}",
         "OPENAI_API_KEY": "{{ OPENAI_API_KEY }}",
@@ -20,6 +21,7 @@
       "automatic_layer": true,
       "environment_variables": {
         "SLACK_BOT_TOKEN": "{{ SLACK_BOT_TOKEN }}",
+        "SLACK_USER_TOKEN": "{{ SLACK_USER_TOKEN }}",
         "SLACK_SIGNING_SECRET": "{{ SLACK_SIGNING_SECRET }}",
         "OPENAI_ORGANIZATION": "{{ OPENAI_ORGANIZATION }}",
         "OPENAI_API_KEY": "{{ OPENAI_API_KEY }}",

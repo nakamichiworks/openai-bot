@@ -12,6 +12,7 @@ from .command import (
     command_help,
     command_image,
     command_image_variation,
+    command_slacksearch,
     command_text,
     command_textedit,
     command_textinsert,
@@ -19,15 +20,19 @@ from .command import (
 )
 from .matcher import match_file_share, match_message_replied
 
+SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN")
+SLACK_USER_TOKEN = os.environ.get("SLACK_USER_TOKEN")
+SLACK_SIGNING_SECRET = os.environ.get("SLACK_SIGNING_SECRET")
+
 bolt_app = App(
-    token=os.environ.get("SLACK_BOT_TOKEN"),
-    signing_secret=os.environ.get("SLACK_SIGNING_SECRET"),
+    token=SLACK_BOT_TOKEN,
+    signing_secret=SLACK_SIGNING_SECRET,
     process_before_response=True,
 )
 
 
 @bolt_app.event("app_mention")
-def reply_mention(event, say):
+def reply_mention(event, context, say):
     ts = event["ts"]
     channel = event["channel"]
     user = event["user"]
@@ -75,6 +80,18 @@ def reply_mention(event, say):
     if command == "image":
         command_image(
             prompt=args[0], client=bolt_app.client, user=user, channel=channel, say=say
+        )
+        return
+
+    if command == "slacksearch":
+        command_slacksearch(
+            query=args[0],
+            count=10,
+            client=bolt_app.client,
+            user=user,
+            channel=channel,
+            say=say,
+            user_token=SLACK_USER_TOKEN,
         )
         return
 

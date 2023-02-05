@@ -45,7 +45,8 @@ After the first deployment, properly configure the settings below. Follow [the o
   - `app_mention`
   - `message.channels`
   - `file_shared`
-- OAuth scops
+- OAuth scopes
   - `chat:write`
   - `files:write`
   - `files:read`
+  - `search:read`

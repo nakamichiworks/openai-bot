@@ -21,6 +21,7 @@ from ..service import (
     generate_text_completion,
     generate_text_edit,
     generate_text_insertion,
+    summarize_slack_messages,
 )
 from ..util import download_file
 
@@ -34,6 +35,7 @@ COMMANDS = (
     "codeedit",
     "codeinsert",
     "image",
+    "slacksearch",
 )
 
 Command = Literal[
@@ -46,6 +48,7 @@ Command = Literal[
     "codeedit",
     "codeinsert",
     "image",
+    "slacksearch",
 ]
 Args = Sequence[str]
 
@@ -108,7 +111,8 @@ def command_help(say: Say):
         "codeedit: コードを編集します\n"
         "codeinsert: コードを挿入します\n"
         "image: 文章から画像を生成します\n"
-        "画像アップロード: 画像のバリエーションを生成します"
+        "画像アップロード: 画像のバリエーションを生成します\n"
+        "slacksearch: Slackの検索結果を要約します\n"
         "```"
     )
 
@@ -205,3 +209,32 @@ def command_image_variation(
                 os.remove(file)
         else:
             say(f"<@{user}> {reply}")
+
+
+def command_slacksearch(
+    query: str,
+    count: int,
+    client: WebClient,
+    user: str,
+    channel: str,
+    say: Say,
+    user_token: str,
+):
+    resp = client.search_messages(
+        query=query,
+        count=count,
+        token=user_token,
+    )
+    messages = [
+        {
+            "channel": m["channel"]["id"],
+            "channel_name": m["channel"]["name"],
+            "user": m["user"],
+            "text": m["text"],
+            "url": m["permalink"],
+        }
+        for m in resp["messages"]["matches"]
+        if m["channel"]["is_private"] is False
+    ]
+    reply = summarize_slack_messages(messages)
+    say(f"<@{user}> {reply}")
