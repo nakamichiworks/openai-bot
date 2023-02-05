@@ -2,7 +2,6 @@ import os
 
 from slack_bolt import App
 
-from .matcher import match_message_replied, match_file_share
 from .command import (
     ParseError,
     command_chat,
@@ -10,6 +9,7 @@ from .command import (
     command_code,
     command_codeedit,
     command_codeinsert,
+    command_help,
     command_image,
     command_image_variation,
     command_text,
@@ -17,6 +17,7 @@ from .command import (
     command_textinsert,
     parse,
 )
+from .matcher import match_file_share, match_message_replied
 
 bolt_app = App(
     token=os.environ.get("SLACK_BOT_TOKEN"),
@@ -37,6 +38,10 @@ def reply_mention(event, say):
     except ParseError:
         reply = "入力したコマンドと文章がおかしいよ！"
         say(f"<@{user}> {reply}")
+        return
+
+    if command == "help":
+        command_help(say=say)
         return
 
     if command == "chat":

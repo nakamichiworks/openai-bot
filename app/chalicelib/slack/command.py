@@ -25,6 +25,7 @@ from ..service import (
 from ..util import download_file
 
 COMMANDS = (
+    "help",
     "chat",
     "text",
     "textedit",
@@ -36,7 +37,15 @@ COMMANDS = (
 )
 
 Command = Literal[
-    "chat", "text", "textedit", "textinsert", "code", "codeedit", "codeinsert", "image"
+    "help",
+    "chat",
+    "text",
+    "textedit",
+    "textinsert",
+    "code",
+    "codeedit",
+    "codeinsert",
+    "image",
 ]
 Args = Sequence[str]
 
@@ -53,13 +62,17 @@ def parse(text: str) -> tuple[Command, Args]:
     text = match_mention.group(1).lstrip()
 
     # Main command parsing
-    match_command = re.match(r"(\S+)\s+?(.+)", text, re.DOTALL)
-    if not (match_command and match_command.group(1) in COMMANDS):
-        command = "text"
-        text = text
+    if re.match(r"help\s*", text, re.DOTALL):
+        command = "help"
+        text = ""
     else:
-        command = match_command.group(1)
-        text = match_command.group(2).lstrip()
+        match_command = re.match(r"(\S+)\s+?(.+)", text, re.DOTALL)
+        if not (match_command and match_command.group(1) in COMMANDS):
+            command = "text"
+            text = text
+        else:
+            command = match_command.group(1)
+            text = match_command.group(2).lstrip()
 
     # Subcommand parsing
     if command in ("codeedit", "textedit"):
@@ -80,6 +93,24 @@ def parse(text: str) -> tuple[Command, Args]:
         args = [text]
 
     return command, args
+
+
+def command_help(say: Say):
+    say(
+        "コマンド一覧\n"
+        "```"
+        "help: このメッセージを表示します\n"
+        "chat: 対話を開始します\n"
+        "text: テキストを生成します\n"
+        "textedit: テキストを編集します\n"
+        "textinsert: テキストを挿入します\n"
+        "code: コードを生成します\n"
+        "codeedit: コードを編集します\n"
+        "codeinsert: コードを挿入します\n"
+        "image: 文章から画像を生成します\n"
+        "画像アップロード: 画像のバリエーションを生成します"
+        "```"
+    )
 
 
 def command_chat(input: str, thread_ts: str, say: Say):
