@@ -133,17 +133,17 @@ def command_chat_next(
 
 def command_text(prompt: str, user: str, say: Say):
     reply = generate_text_completion(prompt)
-    say(f"<@{user}>\n{reply}")
+    say(f"<@{user}>{reply}")
 
 
 def command_textedit(input: str, instruction: str, user: str, say: Say):
     reply = generate_text_edit(input, instruction)
-    say(f"<@{user}>\n{reply}")
+    say(f"<@{user}>{reply}")
 
 
 def command_textinsert(prompt: str, suffix: str, user: str, say: Say):
     reply = generate_text_insertion(prompt, suffix)
-    say(f"<@{user}>\n{reply}")
+    say(f"<@{user}>{reply}")
 
 
 def command_code(prompt: str, user: str, say: Say):
