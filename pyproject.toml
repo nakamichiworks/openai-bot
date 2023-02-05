@@ -11,10 +11,9 @@ chalice = "^1.27.3"
 slack-bolt = "^1.16.1"
 boto3 = "^1.26.41"  # For slack-bolt adapter
 loguru = "^0.6.0"
-requests = "^2.28.1"
 pillow = "^9.4.0"
-# openai = "^0.25.0"  # Too heavy to deploy to AWS Lambda
-langchain = "^0.0.54"
+openai = "^0.26.4"
+langchain = "^0.0.77"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.0"

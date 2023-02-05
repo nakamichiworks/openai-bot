@@ -4,6 +4,7 @@
 import tempfile
 from typing import Optional
 
+import langchain
 from langchain import LLMChain, PromptTemplate
 from loguru import logger
 
@@ -20,7 +21,7 @@ def generate_initial_chat(input: str) -> str:
         input_variables=["thread"],
         template=f"{CHAT_PREFIX}\n\n" + "{thread}",
     )
-    chain = LLMChain(llm=OpenAIClient(), prompt=prompt)
+    chain = LLMChain(llm=langchain.OpenAI(), prompt=prompt)
     thread = f"人間: {input}\nAssistant: "
     try:
         reply = chain.run(thread)
@@ -35,7 +36,7 @@ def generate_next_chat(messages: list[tuple[str, str]], user: str) -> str:
         input_variables=["thread"],
         template=f"{CHAT_PREFIX}\n\n" + "{thread}",
     )
-    chain = LLMChain(llm=OpenAIClient(), prompt=prompt)
+    chain = LLMChain(llm=langchain.OpenAI(), prompt=prompt)
     replies = []
     for usr, msg in messages[-3:]:  # short memory
         if usr == user:
