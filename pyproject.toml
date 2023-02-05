@@ -6,7 +6,7 @@ authors = ["Michihiro Nakamura <nakamichi@nakamichi.org>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "~3.9"
+python = "~3.10"
 chalice = "^1.27.3"
 slack-bolt = "^1.16.1"
 boto3 = "^1.26.41"  # For slack-bolt adapter
