@@ -1,8 +1,8 @@
 import os
 
-from loguru import logger
 from slack_bolt import App
 
+from .matcher import match_message_replied, match_file_share
 from .command import (
     ParseError,
     command_chat,
@@ -78,7 +78,7 @@ def reply_mention(event, say):
     say(f"<@{user}> {reply}")
 
 
-@bolt_app.event("message")
+@bolt_app.event("message", matchers=[match_message_replied])
 def reply_chat(event, say):
     user = event["user"]
     channel = event["channel"]
@@ -94,7 +94,7 @@ def reply_chat(event, say):
         )
 
 
-@bolt_app.event({"type": "message", "subtype": "file_share"})
+@bolt_app.event("message", matchers=[match_file_share])
 def reply_image(event, say):
     user = event["user"]
     channel = event["channel"]
