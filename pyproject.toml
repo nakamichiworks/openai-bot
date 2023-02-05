@@ -14,6 +14,8 @@ loguru = "^0.6.0"
 pillow = "^9.4.0"
 openai = "^0.26.4"
 langchain = "^0.0.77"
+fastapi = "^0.89.1"
+uvicorn = "^0.20.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.0"
@@ -36,7 +38,7 @@ enable_black = true
 enable_flake8 = true
 enable_isort = true
 enable_mypy = true
-isort_known_first_party = ["app", "chalicelib"]
+isort_known_first_party = ["app", "lib"]
 mypy_preset = "strict"
 line_length = 88
 py_version = "py39"
