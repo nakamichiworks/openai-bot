@@ -26,8 +26,14 @@ You can run a development server by the following command.
 The app is deployed to AWS AppRunner by using [`copilot`](https://aws.github.io/copilot-cli/) command.
 
 ```bash
-./scripts/update_manifest.sh
+cd backend
+poetry run ./scripts/update_manifest.sh
 copilot svc deploy
+```
+
+```bash
+cd scheduler
+poetry run ./scripts/deploy.sh
 ```
 
 After the first deployment, properly configure the settings below. Follow [the Slack official tutorial](https://slack.dev/bolt-python/tutorial/getting-started-http#setting-up-events) for details.

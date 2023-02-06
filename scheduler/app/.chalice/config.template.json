@@ -1,0 +1,18 @@
+{
+  "version": "2.0",
+  "app_name": "openai-bot-scheduler",
+  "stages": {
+    "dev": {
+      "api_gateway_stage": "api",
+      "environment_variables": {
+        "APPRUNNER_ARN": "{{ APPRUNNER_ARN_DEV }}"
+      }
+    },
+    "prod": {
+      "api_gateway_stage": "api",
+      "environment_variables": {
+        "APPRUNNER_ARN": "{{ APPRUNNER_ARN }}"
+      }
+    }
+  }
+}
