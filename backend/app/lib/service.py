@@ -6,6 +6,7 @@ import tempfile
 from typing import Optional, Sequence
 
 import langchain
+import trafilatura
 from langchain import LLMChain, PromptTemplate
 from loguru import logger
 
@@ -168,4 +169,19 @@ def generate_image_variation(image_file: str) -> tuple[str, Optional[list[str]]]
 def summarize_slack_messages(messages: Sequence[dict]) -> str:
     # TODO: implement it
     reply = "```\n" + json.dumps(messages, indent=2, ensure_ascii=False) + "\n```"
+    return reply
+
+
+def answer_question_on_website(url: str, question: str) -> str:
+    openai = OpenAIClient()
+    try:
+        html = trafilatura.fetch_url(url)
+        text = trafilatura.extract(html)
+        if text:
+            reply = openai.answer_question_on_text(text, question)
+        else:
+            reply = f"`{url}`のリンク先の内容が読み取れませんでした！"
+    except Exception as e:
+        logger.exception(f"Failed to answer the question: {url=}, {text=}")
+        reply = f"ごめんなさい、質問に回答できません！\n```{type(e).__qualname__}: {e}```"
     return reply
