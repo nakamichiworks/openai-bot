@@ -1,0 +1,51 @@
+[tool.poetry]
+name = "openai-bot-backend"
+version = "0.1.0"
+description = ""
+authors = ["Michihiro Nakamura <nakamichi@nakamichi.org>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+chalice = "^1.27.3"
+slack-bolt = "^1.16.1"
+boto3 = "^1.26.41"  # For slack-bolt adapter
+loguru = "^0.6.0"
+pillow = "^9.4.0"
+openai = "^0.26.4"
+langchain = "^0.0.77"
+fastapi = "^0.89.1"
+uvicorn = "^0.20.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.0"
+pysen = "^0.10.2"
+flake8 = "^6.0.0"
+isort = "^5.11.4"
+black = "^22.12.0"
+mypy = "^0.991"
+jinja2-cli = "^0.8.2"
+ipykernel = "^6.19.4"
+ipython = "^8.7.0"
+matplotlib = "^3.6.2"
+
+
+[tool.pysen]
+version = "0.10"
+
+[tool.pysen.lint]
+enable_black = true
+enable_flake8 = true
+enable_isort = true
+enable_mypy = true
+isort_known_first_party = ["app", "lib"]
+mypy_preset = "strict"
+line_length = 88
+py_version = "py39"
+[[tool.pysen.lint.mypy_targets]]
+  paths = ["."]
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
