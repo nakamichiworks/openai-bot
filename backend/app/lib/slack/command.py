@@ -11,6 +11,7 @@ from slack_bolt.context.say import Say
 from slack_sdk import WebClient
 
 from ..service import (
+    answer_question_on_website,
     generate_code_completion,
     generate_code_edit,
     generate_code_insertion,
@@ -36,6 +37,7 @@ COMMANDS = (
     "codeinsert",
     "image",
     "slacksearch",
+    "webqa",
 )
 
 Command = Literal[
@@ -49,19 +51,21 @@ Command = Literal[
     "codeinsert",
     "image",
     "slacksearch",
+    "webqa",
 ]
 Args = Sequence[str]
 
 
 class ParseError(Exception):
-    pass
+    def __init__(self, message=""):
+        super().__init__(message)
 
 
 def parse(text: str) -> tuple[Command, Args]:
     # Strip the leading mention string
     match_mention = re.match(r"<@[0-9a-zA-Z]+>(.+)$", text.lstrip(), re.DOTALL)
     if not match_mention:
-        raise ParseError
+        raise ParseError(f"{text=}")
     text = match_mention.group(1).lstrip()
 
     # Main command parsing
@@ -83,14 +87,19 @@ def parse(text: str) -> tuple[Command, Args]:
             r"(.*?)^instruction$(.*)", text, re.MULTILINE | re.DOTALL
         )
         if not match_subcommand:
-            raise ParseError
+            raise ParseError(f"{command=}, {text=}")
         args = match_subcommand.groups()
     elif command in ("codeinsert", "textinsert"):
         match_subcommand = re.match(
             r"(.*?)^suffix$(.*)", text, re.MULTILINE | re.DOTALL
         )
         if not match_subcommand:
-            raise ParseError
+            raise ParseError(f"{command=}, {text=}")
+        args = match_subcommand.groups()
+    elif command in ("webqa",):
+        match_subcommand = re.match(r"<?(https?://\S+?)>?\s+?(.*)", text, re.DOTALL)
+        if not match_subcommand:
+            raise ParseError(f"{command=}, {text=}")
         args = match_subcommand.groups()
     else:
         args = [text]
@@ -237,4 +246,9 @@ def command_slacksearch(
         if m["channel"]["is_private"] is False
     ]
     reply = summarize_slack_messages(messages)
+    say(f"<@{user}> {reply}")
+
+
+def command_webqa(url: str, question: str, user: str, say: Say):
+    reply = answer_question_on_website(url, question)
     say(f"<@{user}> {reply}")

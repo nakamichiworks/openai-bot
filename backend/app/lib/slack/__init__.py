@@ -16,6 +16,7 @@ from .command import (
     command_text,
     command_textedit,
     command_textinsert,
+    command_webqa,
     parse,
 )
 from .matcher import match_file_share, match_message_replied
@@ -40,8 +41,8 @@ def reply_mention(event, context, say):
 
     try:
         command, args = parse(msg)
-    except ParseError:
-        reply = "入力したコマンドと文章がおかしいよ！"
+    except ParseError as e:
+        reply = f"入力したコマンドと文章がおかしいよ！\n```{type(e).__qualname__}: {e}```"
         say(f"<@{user}> {reply}")
         return
 
@@ -93,6 +94,10 @@ def reply_mention(event, context, say):
             say=say,
             user_token=SLACK_USER_TOKEN,
         )
+        return
+
+    if command == "webqa":
+        command_webqa(url=args[0], question=args[1], user=user, say=say)
         return
 
     # must be unreachable
